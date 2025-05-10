@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="view_cart.php">View Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Our Products</h1>
+
+        <div id="product-list" class="product-list"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 E-Commerce Website</p>
+    </footer>
+
+    <script>
+        fetch('get_products.php')
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('product-list');
+                data.forEach(product => {
+                    list.innerHTML += `
+                        <div class="product-card">
+                            <img src="images/${product.image}.jpeg" alt="${product.name}">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                            <p><strong>Price:</strong> $${product.price}</p>
+                            <button onclick="addToCart(${product.id})">Add to Cart</button>
+                        </div>`;
+                });
+            });
+
+        function addToCart(productId) {
+            fetch('add_to_cart.php?id=' + productId)
+                .then(() => {
+                    alert('Added to cart!');
+                });
+        }
+    </script>
+</body>
+</html>
